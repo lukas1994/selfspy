@@ -3,17 +3,20 @@ Selfspy is a daemon for Unix/X11, (thanks to @ljos!) Mac OS X and (thanks to @Fo
 
 See Example Statistics, below, for some of the fabulous things you can do with this data.
 
-### Installing Selfspy
+### Installing Selfspy (OSX)
 
 ```
 pip install -r osx-requirements.txt --user
 sudo python setup.py install
 ```
 
-In OS X you also need to enable access for assistive devices.
-To do that in 10.9 you have to add the correct application in
-`System Preferences > Privacy > Accessibility`. What worked for me was to add iTerm and selfspy and /usr/bin/python.
-Maybe use https://github.com/jacobsalmela/tccutil.
+You also need to enable access for assistive devices.
+To do that you have to add the correct applications in
+`System Preferences > Privacy > Accessibility`. What worked for me was to add iTerm `selfspy` and `/usr/bin/python`.
+Maybe use [this tool](https://github.com/jacobsalmela/tccutil) to do it from the terminal.
+
+### IMPORTANT: changes in this fork
+* no encryption
 
 ### Running Selfspy
 You run selfspy with `selfspy`. You should probably start with `selfspy --help` to get to know the command line arguments. As of this writing, it should look like this:
@@ -273,6 +276,8 @@ See the README file or http://gurgeh.github.com/selfspy for examples.
 ### Email
 To monitor that Selfspy works as it should and to continuously get feedback on yourself, it is good to  regularly mail yourself some statistics. I think the easiest way to automate this is using [sendEmail](http://www.debianadmin.com/how-to-sendemail-from-the-command-line-using-a-gmail-account-and-others.html), which can do neat stuff like send through your Gmail account.
 
-For example, put something like this in your weekly [cron](http://clickmojo.com/code/cron-tutorial.html) jobs:
-`/(PATH_TO_FILE)/selfstats --back 1 w --ratios 900 --periods 900 | /usr/bin/sendEmail -q -u "Weekly selfstats" <etc..>`
+Follow [this guide](https://www.developerfiles.com/how-to-send-emails-from-localhost-mac-os-x-el-capitan/) to setup `mail` on OSX.
+
+For example, put something like this in your [cron](http://clickmojo.com/code/cron-tutorial.html) jobs (`crontab -e`):
+`10 0 * * * selfstats -b 1 w --periods 900 --ratios 900 | mail -s "daily keyboard summary" "EMAIL"`
 This will give you some interesting feedback on how much and when you have been active this last week and how much you have written vs moused, etc.

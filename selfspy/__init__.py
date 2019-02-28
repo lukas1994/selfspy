@@ -85,9 +85,9 @@ def main():
 
     args['data_dir'] = os.path.expanduser(args['data_dir'])
 
-    def check_with_encrypter(password):
-        encrypter = make_encrypter(password)
-        return check_password.check(args['data_dir'], encrypter)
+    # def check_with_encrypter(password):
+    #     encrypter = make_encrypter(password)
+    #     return check_password.check(args['data_dir'], encrypter)
 
     try:
         os.makedirs(args['data_dir'])
@@ -102,17 +102,18 @@ def main():
         print 'Shutting down.'
         sys.exit(1)
 
-    if args['no_text']:
-        args['password'] = ""
+    # if args['no_text']:
+    #     args['password'] = ""
 
-    if args['password'] is None:
-        args['password'] = get_password(verify=check_with_encrypter)
+    # if args['password'] is None:
+    #     args['password'] = get_password(verify=check_with_encrypter)
 
+    args['password'] = ""
     encrypter = make_encrypter(args['password'])
 
-    if not check_password.check(args['data_dir'], encrypter):
-        print 'Password failed'
-        sys.exit(1)
+    # if not check_password.check(args['data_dir'], encrypter):
+    #     print 'Password failed (' + args['password'] + ')'
+    #     sys.exit(1)
 
     if args['change_password']:
         new_password = get_password(message="New Password: ")

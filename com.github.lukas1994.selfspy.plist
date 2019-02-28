@@ -7,7 +7,6 @@
     <string>com.github.lukas1994.selfspy</string>
     <key>ProgramArguments</key>
     <array>
-      <string>/usr/bin/python</string>
       <string>/usr/local/bin/selfspy</string>
     </array>
     <key>RunAtLoad</key>

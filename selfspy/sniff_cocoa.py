@@ -131,7 +131,6 @@ class Sniffer:
                 elif event.deltaX() < 0:
                     todo = lambda: self.mouse_button_hook(7, loc.x, loc.y)
             elif event_type == NSEventTypeKeyDown:
-                print(event)
                 flags = event.modifierFlags()
                 modifiers = []  # OS X api doesn't care it if is left or right
                 if flags & NSControlKeyMask:
@@ -154,7 +153,6 @@ class Sniffer:
                               keycodes.get(character,
                                            character),
                               event.isARepeat())
-                print(event.keyCode(), modifiers, keycodes.get(character, character), event.isARepeat())
             elif event_type == NSMouseMoved:
                 todo = lambda: self.mouse_move_hook(loc.x, loc.y)
             elif event_type == NSFlagsChanged:
@@ -168,6 +166,7 @@ class Sniffer:
                 for app in activeApps:
                     if app.isActive():
                         app_name = app.localizedName()
+                        app_pid = app.processIdentifier()
                         options = kCGWindowListOptionOnScreenOnly | kCGWindowListExcludeDesktopElements
                         windowList = CGWindowListCopyWindowInfo(options,
                                                                 kCGNullWindowID)
@@ -181,7 +180,7 @@ class Sniffer:
                         ]
                         windowList = windowList + windowListLowPrio
                         for window in windowList:
-                            if window['kCGWindowOwnerName'] == app_name:
+                            if window['kCGWindowOwnerPID'] == app_pid:
                                 geometry = window['kCGWindowBounds']
                                 self.screen_hook(window['kCGWindowOwnerName'],
                                                  window.get('kCGWindowName', u''),
