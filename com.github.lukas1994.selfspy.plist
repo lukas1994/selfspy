@@ -4,12 +4,17 @@
 <plist version="1.0">
   <dict>
     <key>Label</key>
-    <string>com.github.gurgeh.selfspy</string>
+    <string>com.github.lukas1994.selfspy</string>
     <key>ProgramArguments</key>
     <array>
+      <string>/usr/bin/python</string>
       <string>/usr/local/bin/selfspy</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/mycommand.out</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/mycommand.err</string>
   </dict>
 </plist>

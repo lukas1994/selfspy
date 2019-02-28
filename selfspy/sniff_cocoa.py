@@ -27,7 +27,7 @@ from Cocoa import (
     NSFlagsChangedMask,
     NSAlternateKeyMask, NSCommandKeyMask, NSControlKeyMask,
     NSShiftKeyMask, NSAlphaShiftKeyMask,
-    NSApplicationActivationPolicyProhibited
+    NSApplicationActivationPolicyProhibited, NSEventTypeKeyDown
 )
 from Quartz import (
     CGWindowListCopyWindowInfo,
@@ -68,8 +68,8 @@ class Sniffer:
                         | NSFlagsChangedMask)
                 NSEvent.addGlobalMonitorForEventsMatchingMask_handler_(mask, sc.handler)
 
-            def applicationWillResignActive(self, notification):
-                self.applicationWillTerminate_(notification)
+            def applicationWillResignActive(self):
+                self.applicationWillTerminate_(None)
                 return True
 
             def applicationShouldTerminate_(self, notification):
@@ -130,7 +130,8 @@ class Sniffer:
                     todo = lambda: self.mouse_button_hook(6, loc.x, loc.y)
                 elif event.deltaX() < 0:
                     todo = lambda: self.mouse_button_hook(7, loc.x, loc.y)
-            elif event_type == NSKeyDown:
+            elif event_type == NSEventTypeKeyDown:
+                print(event)
                 flags = event.modifierFlags()
                 modifiers = []  # OS X api doesn't care it if is left or right
                 if flags & NSControlKeyMask:
@@ -153,6 +154,7 @@ class Sniffer:
                               keycodes.get(character,
                                            character),
                               event.isARepeat())
+                print(event.keyCode(), modifiers, keycodes.get(character, character), event.isARepeat())
             elif event_type == NSMouseMoved:
                 todo = lambda: self.mouse_move_hook(loc.x, loc.y)
             elif event_type == NSFlagsChanged:

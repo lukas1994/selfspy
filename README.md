@@ -3,59 +3,17 @@ Selfspy is a daemon for Unix/X11, (thanks to @ljos!) Mac OS X and (thanks to @Fo
 
 See Example Statistics, below, for some of the fabulous things you can do with this data.
 
-### Windows
-
-Due to Windows libs needing a external compiler to compile libs, some libs won't compile on all computers.   
-These are the sinners*:   
-`pyHook==1.5.1`   
-`pyCrypto==2.5 `   
-They are added too the windows-requirements.txt, but IF you fail to build these libs, here are the precompiled binaries. pyWin32 is needed for some library dependency, pip can't install pyWin32, so please use the binary below.      
-pyHook: http://sourceforge.net/projects/pyhook/files/pyhook/   
-pyCrytpo: http://www.voidspace.org.uk/python/modules.shtml#pycrypto   
-pyWin32: http://sourceforge.net/projects/pywin32/files/pywin32/  
-  
-*SQLAlchemy does compile without the external compiler, but it uses a clean Python version which might slow things down.  
-   
 ### Installing Selfspy
 
-If you run ArchLinux, here is an AUR package which may be up-to-date:
-https://aur.archlinux.org/packages/selfspy-git/
-
-To install manually, either clone the repository from Github (git clone git://github.com/gurgeh/selfspy), or click on the Download link on http://github.com/gurgeh/selfspy/ to get the latest Python source.
-
-Selfspy is only tested with Python 2.7 and has a few dependencies on other Python libraries that need to be satisfied. These are documented in the requirements.txt file. If you are on Linux, you will need subversion installed for pip to install python-xlib. If you are on Mac, you will not need to install python-xlib at all. Python-xlib is currently a tricky package to include in the requirements since it is not on PyPi.
 ```
-pip install svn+https://python-xlib.svn.sourceforge.net/svnroot/python-xlib/tags/xlib_0_15rc1/ # Only do this step on Linux!
-python setup.py install
+pip install -r osx-requirements.txt --user
+sudo python setup.py install
 ```
 
-You will also need the ``Tkinter`` python libraries. On ubuntu and debian
-
-```
-sudo apt-get install python-tk
-```
-
-On FreeBSD
-
-```
-cd /usr/ports/x11-toolkits/py-tkinter/
-sudo make config-recursive && sudo make install clean
-```
-
-
-There is also a simple Makefile. Run `make install` as root/sudo, to install the files in /var/lib/selfspy and also create the symlinks /usr/bin/selfspy and /usr/bin/selfstats.
-
-Report issues here:
-https://github.com/gurgeh/selfspy/issues
-
-General discussion here:
-http://ost.io/gurgeh/selfspy
-
-#### OS X
 In OS X you also need to enable access for assistive devices.
-To do that in &lt;10.9 there is a checkbox in `System Preferences > Accessibility`,
-in 10.9 you have to add the correct application in
-`System Preferences > Privacy > Accessibility`.
+To do that in 10.9 you have to add the correct application in
+`System Preferences > Privacy > Accessibility`. What worked for me was to add iTerm and selfspy and /usr/bin/python.
+Maybe use https://github.com/jacobsalmela/tccutil.
 
 ### Running Selfspy
 You run selfspy with `selfspy`. You should probably start with `selfspy --help` to get to know the command line arguments. As of this writing, it should look like this:
@@ -106,8 +64,13 @@ Unless you use the --no-text flag, selfspy will store everything you type in two
 Normally you would like Selfspy to start automatically when you launch X. How to do this depends on your system, but it will normally mean editing *~/.xinitrc* or *~/.xsession*. If you run KDE, *~/.kde/Autostart*, is a good place to put startup scripts. When run, Selfspy will immediately spawn a daemon and exit.
 
 #### Running on login in OS X
-If you want selfspy to start automatically on login you need to copy the [com.github.gurgeh.selfspy.plist](https://raw.githubusercontent.com/gurgeh/selfspy/master/com.github.gurgeh.selfspy.plist)
-file to `~/Library/LaunchAgents/`.
+If you want selfspy to start automatically on login you need to copy the `com.github.lukas1994.selfspy.plist` file to `~/Library/LaunchAgents/`.
+
+```
+launchctl load ~/Library/LaunchAgents/com.github.lukas1994.selfspy.plist
+launchctl start com.github.lukas1994.selfspy
+tail -f /var/log/system.log
+```
 
 ### Example Statistics
 *"OK, so now all this data will be stored, but what can I use it for?"*
