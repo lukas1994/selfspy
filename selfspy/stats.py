@@ -555,7 +555,7 @@ def make_encrypter(password):
     return encrypter
 
 
-def main():
+if __name__ == '__main__':
     try:
         args = vars(parse_config())
     except EnvironmentError as e:
@@ -581,7 +581,7 @@ def main():
             sys.exit(1)
 
     ss.do()
-
-
-if __name__ == '__main__':
-    main()
+    # When trying to manually read data uncomment the previous line and run this file with
+    # `python -i`. Then, for example:
+    # keys = ss.filter_prop(models.Keys, models.Keys.started).limit(10).all()[0]
+    # keys.load_timings()
