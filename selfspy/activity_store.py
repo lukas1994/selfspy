@@ -17,6 +17,7 @@
 
 import time
 from datetime import datetime
+from functools import reduce
 NOW = datetime.now
 
 import sqlalchemy
@@ -61,7 +62,7 @@ class ActivityStore:
 
         self.store_text = store_text
         self.repeat_char = repeat_char
-        self.curtext = u""
+        self.curtext = ""
 
         self.key_presses = []
         self.mouse_path = []
@@ -188,7 +189,7 @@ class ActivityStore:
             add = lambda count, press: count + (0 if press.is_repeat else 1)
             nrkeys = reduce(add, self.key_presses, 0)
 
-            curtext = u""
+            curtext = ""
             if not self.store_text:
                 keys = []
             else:

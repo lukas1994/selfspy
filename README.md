@@ -6,7 +6,10 @@ See Example Statistics, below, for some of the fabulous things you can do with t
 ### Installing Selfspy (OSX)
 
 ```
+brew update
+brew install pyenv
 python3.6 -m venv .env
+source .env/bin/activate
 pip install -r osx-requirements.txt --user
 sudo python setup.py install
 ```
