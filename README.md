@@ -279,5 +279,5 @@ To monitor that Selfspy works as it should and to continuously get feedback on y
 Follow [this guide](https://www.developerfiles.com/how-to-send-emails-from-localhost-mac-os-x-el-capitan/) to setup `mail` on OSX.
 
 For example, put something like this in your [cron](http://clickmojo.com/code/cron-tutorial.html) jobs (`crontab -e`):
-`10 0 * * * selfstats -b 1 w --periods 900 --ratios 900 | mail -s "daily keyboard summary" "EMAIL"`
+`10 0 * * * /usr/local/bin/selfstats -b 1 w --periods 900 --ratios 900 | mail -s "daily keyboard summary" "EMAIL"`
 This will give you some interesting feedback on how much and when you have been active this last week and how much you have written vs moused, etc.
