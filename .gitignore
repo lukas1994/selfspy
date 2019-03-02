@@ -9,3 +9,4 @@ bin/
 lib/
 include/
 .python-version
+.env
