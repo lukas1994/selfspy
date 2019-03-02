@@ -19,6 +19,7 @@
 
 import os
 import sys
+import signal
 
 import argparse
 import ConfigParser
@@ -136,6 +137,13 @@ def main():
                            store_text=(not args['no_text']),
                            repeat_char=(not args['no_repeat']))
     cfg.LOCK.acquire()
+    def cleanup(*args):
+        print "Exiting (cleanup)"
+        if cfg.LOCK.is_locked():
+            cfg.LOCK.release()
+        os._exit(0)
+    for sig in (signal.SIGABRT, signal.SIGINT, signal.SIGTERM):
+        signal.signal(sig, cleanup)
     try:
         astore.run()
     except SystemExit:
@@ -143,7 +151,7 @@ def main():
     except KeyboardInterrupt:
         pass
     # In OS X this is has to be released in sniff_cocoa
-    cfg.LOCK.release()
+    cleanup()
 
 if __name__ == '__main__':
     main()

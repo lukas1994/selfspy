@@ -83,7 +83,7 @@ class Sniffer:
                 # pyobc bridge.
                 if cfg.LOCK.is_locked():
                     cfg.LOCK.release()
-                print("Exiting")
+                print("Exiting (applicationWillTerminate_)")
                 return None
 
         return AppDelegate
