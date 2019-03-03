@@ -34,7 +34,7 @@ import hashlib
 import selfspy.config as cfg
 
 # import check_password
-from period import Period
+from selfspy.period import Period
 
 import selfspy.models as models
 
@@ -551,8 +551,7 @@ def make_encrypter(password):
         encrypter = Blowfish.new(hashlib.md5(password).digest())
     return encrypter
 
-
-if __name__ == '__main__':
+def main():
     try:
         args = vars(parse_config())
     except EnvironmentError as e:
@@ -587,3 +586,6 @@ if __name__ == '__main__':
     # cbs[8].decrypt_text()
     # wds = ss.session.query(models.Window).order_by(models.Window.id).limit(100).all()
     # wds[8].decrypt_url()
+
+if __name__ == '__main__':
+    main()
