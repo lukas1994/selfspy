@@ -39,6 +39,8 @@ from PyObjCTools import AppHelper
 import config as cfg
 import signal
 import time
+import traceback
+
 
 FORCE_SCREEN_CHANGE = 10
 WAIT_ANIMATION = 1
@@ -109,6 +111,7 @@ class Sniffer:
             check_windows = False
             event_type = event.type()
             todo = lambda: None
+            # print(event)
             if (
                 time.time() - self.last_check_windows > FORCE_SCREEN_CHANGE and
                 event_type != NSKeyUp
@@ -192,10 +195,14 @@ class Sniffer:
                                 break
                         break
             todo()
-        except (SystemExit, KeyboardInterrupt):
+        except (SystemExit, KeyboardInterrupt) as e:
+            print(e)
+            traceback.print_exc()
             AppHelper.stopEventLoop()
             return
-        except:
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
             AppHelper.stopEventLoop()
             raise
 
