@@ -29,6 +29,7 @@ osascript -e 'tell application "Google Chrome" to return URL of active tab of fr
 and allow the access.
 
 ### IMPORTANT: changes in this fork
+* works only on OSX
 * no encryption
 * tracks clipboard
 * tracks Chrome urls
