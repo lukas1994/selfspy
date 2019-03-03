@@ -39,9 +39,6 @@ from period import Period
 
 import models
 
-import codecs
-sys.stdout = codecs.getwriter('utf8')(sys.stdout)
-
 ACTIVE_SECONDS = 180
 PERIOD_LOOKUP = {'s': 'seconds', 'm': 'minutes', 'h': 'hours', 'd': 'days', 'w': 'weeks'}
 ACTIVITY_ACTIONS = {'active', 'periods', 'pactive', 'tactive', 'ratios'}
@@ -322,6 +319,7 @@ class Selfstats:
     def show_rows(self):
         fkeys = self.filter_keys()
         rows = 0
+        print('xxx')
         print('<RowID> <Starting date and time> <Duration> <Process> <Window title> <Number of keys pressed>', end=' ')
         if self.args['showtext'] and self.need_humanreadable:
             print('<Decrypted Human Readable text>')
@@ -585,3 +583,5 @@ if __name__ == '__main__':
     # `python -i`. Then, for example:
     # keys = ss.filter_prop(models.Keys, models.Keys.started).limit(10).all()[0]
     # keys.load_timings()
+    # cbs = ss.session.query(models.Clipboard).order_by(models.Clipboard.id).limit(10).all()
+    # cbs[8].decrypt_text()

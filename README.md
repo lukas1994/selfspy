@@ -24,6 +24,7 @@ Maybe use [this tool](https://github.com/jacobsalmela/tccutil) to do it from the
 
 ### IMPORTANT: changes in this fork
 * no encryption
+* tracks clipboard
 
 ### Running Selfspy
 You run selfspy with `selfspy`. You should probably start with `selfspy --help` to get to know the command line arguments. As of this writing, it should look like this:

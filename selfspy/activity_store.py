@@ -21,6 +21,8 @@ from functools import reduce
 NOW = datetime.now
 
 import sqlalchemy
+import pyperclip
+
 
 import platform
 if platform.system() == 'Darwin':
@@ -31,7 +33,7 @@ else:
     import sniff_x as sniffer
 
 import models
-from models import Process, Window, Geometry, Click, Keys
+from models import Process, Window, Geometry, Click, Keys, Clipboard
 
 
 SKIP_MODIFIERS = {"", "Shift_L", "Control_L", "Super_L", "Alt_L", "Super_R", "Control_R", "Shift_R", "[65027]"}  # [65027] is AltGr in X for some ungodly reason.
@@ -76,6 +78,8 @@ class ActivityStore:
 
         self.started = NOW()
         self.last_screen_change = None
+
+        self.last_clipboard = None
 
     def trycommit(self):
         self.last_commit = time.time()
@@ -231,6 +235,17 @@ class ActivityStore:
         self.key_presses.append(KeyPress(string, now - self.last_key_time, is_repeat))
         self.last_key_time = now
 
+        self.store_clipboard()
+
+
+    def store_clipboard(self):
+        clipboard = pyperclip.paste()
+        if clipboard and self.last_clipboard != clipboard:
+            self.last_clipboard = clipboard
+            if len(clipboard) > 10000:
+                clipboard = clipboard[:10000] + '... (truncated)'
+            self.session.add(Clipboard(clipboard))
+
     def store_click(self, button, x, y):
         """ Stores incoming mouse-clicks """
         self.session.add(Click(button,
@@ -254,6 +269,8 @@ class ActivityStore:
             self.last_scroll[button] = time.time()
 
         self.store_click(button, x, y)
+
+        self.store_clipboard()
 
     def got_mouse_move(self, x, y):
         """ Queues mouse movements.

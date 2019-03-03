@@ -100,4 +100,5 @@ pyobjc-framework-VideoSubscriberAccount==5.1.2
 pyobjc-framework-VideoToolbox==5.1.2
 pyobjc-framework-Vision==5.1.2
 pyobjc-framework-WebKit==5.1.2
+pyperclip==1.7.0
 SQLAlchemy==1.2.18

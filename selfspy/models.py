@@ -35,14 +35,15 @@ def initialize(fname):
     return sessionmaker(bind=engine)
 
 ENCRYPTER = None
+ENCODING = 'utf-8'
 
 Base = declarative_base()
 
 def compress(s):
-    return zlib.compress(s.encode('utf-8'))
+    return zlib.compress(s.encode(ENCODING))
 
 def decompress(b):
-    return zlib.decompress(b).decode('utf-8')
+    return zlib.decompress(b).decode(ENCODING)
 
 class SpookMixin(object):
 
@@ -134,23 +135,32 @@ def pad(s, padnum):
     return s + '\0' * (padnum - (ls % padnum))
 
 
-def maybe_encrypt(s, other_encrypter=None):
-    if other_encrypter is not None:
-        s = pad(s, 8)
-        s = other_encrypter.encrypt(s)
-    elif ENCRYPTER:
+def maybe_encrypt(s):
+    if ENCRYPTER:
         s = pad(s, 8)
         s = ENCRYPTER.encrypt(s)
     return s
 
 
-def maybe_decrypt(s, other_encrypter=None):
-    if other_encrypter is not None:
-        s = other_encrypter.decrypt(s)
-    elif ENCRYPTER:
+def maybe_decrypt(s):
+    if ENCRYPTER:
         s = ENCRYPTER.decrypt(s)
     return s
 
+class Clipboard(SpookMixin, Base):
+    text = Column(Binary, nullable=False)
+
+    def __init__(self, text):
+        self.encrypt_text(text)
+
+    def encrypt_text(self, text):
+        self.text = maybe_encrypt(compress(text))
+
+    def decrypt_text(self):
+        return decompress(maybe_decrypt(self.text))
+
+    def __repr__(self):
+        return "<Clipboard %s>" % self.text
 
 class Keys(SpookMixin, Base):
     text = Column(Binary, nullable=False)
@@ -184,14 +194,11 @@ class Keys(SpookMixin, Base):
         self.window_id = window_id
         self.geometry_id = geometry_id
 
-    def encrypt_text(self, text, other_encrypter=None):
-        ztext = maybe_encrypt(text, other_encrypter=other_encrypter)
-        self.text = ztext
+    def encrypt_text(self, text):
+        self.text = maybe_encrypt(text)
 
-    def encrypt_keys(self, keys, other_encrypter=None):
-        zkeys = maybe_encrypt(compress(json.dumps(keys)),
-                              other_encrypter=other_encrypter)
-        self.keys = zkeys
+    def encrypt_keys(self, keys):
+        self.keys = maybe_encrypt(compress(json.dumps(keys)))
 
     def decrypt_text(self):
         return maybe_decrypt(self.text)
