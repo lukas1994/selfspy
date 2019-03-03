@@ -36,7 +36,7 @@ from Quartz import (
     kCGNullWindowID
 )
 from PyObjCTools import AppHelper
-from . import config as cfg
+import config as cfg
 import signal
 import time
 
@@ -84,6 +84,7 @@ class Sniffer:
                 if cfg.LOCK.is_locked():
                     cfg.LOCK.release()
                 print("Exiting (applicationWillTerminate_)")
+                print(notification)
                 return None
 
         return AppDelegate

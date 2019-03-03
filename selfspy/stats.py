@@ -31,13 +31,13 @@ from collections import Counter
 from Crypto.Cipher import Blowfish
 import hashlib
 
-from . import config as cfg
+import config as cfg
 
-from selfspy import check_password
-from selfspy.password_dialog import get_password
-from selfspy.period import Period
+import check_password
+from password_dialog import get_password
+from period import Period
 
-from selfspy import models
+import models
 
 import codecs
 sys.stdout = codecs.getwriter('utf8')(sys.stdout)
