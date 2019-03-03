@@ -22,9 +22,16 @@ To do that you have to add the correct applications in
 `System Preferences > Privacy > Accessibility`. What worked for me was to add iTerm `selfspy` and `/usr/bin/python`.
 Maybe use [this tool](https://github.com/jacobsalmela/tccutil) to do it from the terminal.
 
+You also might have to give `osascript` permissions to access Chrome. Just run
+```
+osascript -e 'tell application "Google Chrome" to return URL of active tab of front window'
+```
+and allow the access.
+
 ### IMPORTANT: changes in this fork
 * no encryption
 * tracks clipboard
+* tracks Chrome urls
 
 ### Running Selfspy
 You run selfspy with `selfspy`. You should probably start with `selfspy --help` to get to know the command line arguments. As of this writing, it should look like this:

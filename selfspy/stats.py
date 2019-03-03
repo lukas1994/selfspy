@@ -585,3 +585,5 @@ if __name__ == '__main__':
     # keys.load_timings()
     # cbs = ss.session.query(models.Clipboard).order_by(models.Clipboard.id).limit(10).all()
     # cbs[8].decrypt_text()
+    # wds = ss.session.query(models.Window).order_by(models.Window.id).limit(100).all()
+    # wds[8].decrypt_url()

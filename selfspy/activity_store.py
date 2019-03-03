@@ -22,6 +22,7 @@ NOW = datetime.now
 
 import sqlalchemy
 import pyperclip
+from subprocess import check_output
 
 
 import platform
@@ -145,7 +146,11 @@ class ActivityStore:
         cur_window = self.session.query(Window).filter_by(title=window_name,
                                                           process_id=cur_process.id).scalar()
         if not cur_window:
-            cur_window = Window(window_name, cur_process.id)
+            url = None
+            if process_name == 'Google Chrome':
+                url = check_output('osascript -e \'tell application "Google Chrome" to return URL of active tab of front window\'', shell=True)
+                url = url.decode('utf-8')
+            cur_window = Window(window_name, cur_process.id, url)
             self.session.add(cur_window)
 
         if not (self.current_window.proc_id == cur_process.id

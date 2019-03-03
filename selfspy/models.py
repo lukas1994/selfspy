@@ -32,7 +32,7 @@ from sqlalchemy.orm import sessionmaker, relationship, backref
 def initialize(fname):
     engine = create_engine('sqlite:///%s' % fname)
     Base.metadata.create_all(engine)
-    return sessionmaker(bind=engine)
+    return sessionmaker(bind=engine, autoflush=False)
 
 ENCRYPTER = None
 ENCODING = 'utf-8'
@@ -71,9 +71,18 @@ class Window(SpookMixin, Base):
     process_id = Column(Integer, ForeignKey('process.id'), nullable=False, index=True)
     process = relationship("Process", backref=backref('windows'))
 
-    def __init__(self, title, process_id):
+    url = Column(Binary)
+
+    def __init__(self, title, process_id, url=None):
         self.title = title
         self.process_id = process_id
+        self.encrypt_url(url)
+
+    def encrypt_url(self, url):
+        self.url = maybe_encrypt(compress(url)) if url else None
+
+    def decrypt_url(self):
+        return decompress(maybe_decrypt(self.url)) if self.url else None
 
     def __repr__(self):
         return "<Window '%s'>" % (repr(self.title))
