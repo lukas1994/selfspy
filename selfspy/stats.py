@@ -34,7 +34,6 @@ import hashlib
 import config as cfg
 
 import check_password
-from password_dialog import get_password
 from period import Period
 
 import models
@@ -569,9 +568,10 @@ if __name__ == '__main__':
     ss = Selfstats(os.path.join(args['data_dir'], cfg.DBNAME), args)
 
     if ss.need_text or ss.need_keys:
-        if args['password'] is None:
-            args['password'] = get_password(verify=check_with_encrypter)
+        # if args['password'] is None:
+        #     args['password'] = get_password(verify=check_with_encrypter)
 
+        args['password'] = ''
         models.ENCRYPTER = make_encrypter(args['password'])
 
         if not check_password.check(args['data_dir'], models.ENCRYPTER, read_only=True):

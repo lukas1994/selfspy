@@ -30,7 +30,6 @@ import hashlib
 from Crypto.Cipher import Blowfish
 
 from activity_store import ActivityStore
-from password_dialog import get_password
 import check_password
 
 import config as cfg
@@ -115,22 +114,6 @@ def main():
     # if not check_password.check(args['data_dir'], encrypter):
     #     print 'Password failed (' + args['password'] + ')'
     #     sys.exit(1)
-
-    if args['change_password']:
-        new_password = get_password(message="New Password: ")
-        new_encrypter = make_encrypter(new_password)
-        print('Re-encrypting your keys...')
-        astore = ActivityStore(os.path.join(args['data_dir'], cfg.DBNAME),
-                               encrypter,
-                               store_text=(not args['no_text']),
-                               repeat_char=(not args['no_repeat']))
-        astore.change_password(new_encrypter)
-        # delete the old password.digest
-        os.remove(os.path.join(args['data_dir'], check_password.DIGEST_NAME))
-        check_password.check(args['data_dir'], new_encrypter)
-        # don't assume we want the logger to run afterwards
-        print('Exiting...')
-        sys.exit(0)
 
     astore = ActivityStore(os.path.join(args['data_dir'], cfg.DBNAME),
                            encrypter,

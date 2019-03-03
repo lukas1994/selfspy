@@ -1,5 +1,4 @@
 entrypoints==0.3
-keyring==18.0.0
 lockfile==0.12.2
 pycrypto==2.6.1
 pyobjc==5.1.2
