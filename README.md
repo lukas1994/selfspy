@@ -11,10 +11,12 @@ source .env/bin/activate
 pip install -r requirements.txt
 
 # to debug
+python setup.py develop # to setup a dev package that symlinks to dev files
 ./selfspy/__init__.py
 
 # to install
-sudo python setup.py install
+deactivate
+sudo python3.6 setup.py install
 ```
 
 You also need to enable access for assistive devices.

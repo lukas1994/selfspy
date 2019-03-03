@@ -27,14 +27,13 @@ from subprocess import check_output
 
 import platform
 if platform.system() == 'Darwin':
-    import sniff_cocoa as sniffer
+    import selfspy.sniff_cocoa as sniffer
 elif platform.system() == 'Windows':
-    import sniff_win as sniffer
+    import selfspy.sniff_win as sniffer
 else:
-    import sniff_x as sniffer
+    import selfspy.sniff_x as sniffer
 
-import models
-from models import Process, Window, Geometry, Click, Keys, Clipboard
+import selfspy.models as models
 
 
 SKIP_MODIFIERS = {"", "Shift_L", "Control_L", "Super_L", "Alt_L", "Super_R", "Control_R", "Shift_R", "[65027]"}  # [65027] is AltGr in X for some ungodly reason.
@@ -123,16 +122,16 @@ class ActivityStore:
         self.last_screen_change = args
 
         cur_process = self.session.query(
-            Process
+            models.Process
         ).filter_by(
             name=process_name
         ).scalar()
         if not cur_process:
-            cur_process = Process(process_name)
+            cur_process = models.Process(process_name)
             self.session.add(cur_process)
 
         cur_geometry = self.session.query(
-            Geometry
+            models.Geometry
         ).filter_by(
             xpos=win_x,
             ypos=win_y,
@@ -140,17 +139,17 @@ class ActivityStore:
             height=win_height
         ).scalar()
         if not cur_geometry:
-            cur_geometry = Geometry(win_x, win_y, win_width, win_height)
+            cur_geometry = models.Geometry(win_x, win_y, win_width, win_height)
             self.session.add(cur_geometry)
 
-        cur_window = self.session.query(Window).filter_by(title=window_name,
+        cur_window = self.session.query(models.Window).filter_by(title=window_name,
                                                           process_id=cur_process.id).scalar()
         if not cur_window:
             url = None
             if process_name == 'Google Chrome':
                 url = check_output('osascript -e \'tell application "Google Chrome" to return URL of active tab of front window\'', shell=True)
                 url = url.decode('utf-8')
-            cur_window = Window(window_name, cur_process.id, url)
+            cur_window = models.Window(window_name, cur_process.id, url)
             self.session.add(cur_window)
 
         if not (self.current_window.proc_id == cur_process.id
@@ -204,7 +203,7 @@ class ActivityStore:
             else:
                 curtext = ''.join(keys)
 
-            self.session.add(Keys(curtext.encode('utf8'),
+            self.session.add(models.Keys(curtext.encode('utf8'),
                                   keys,
                                   timings,
                                   nrkeys,
@@ -249,11 +248,11 @@ class ActivityStore:
             self.last_clipboard = clipboard
             if len(clipboard) > 10000:
                 clipboard = clipboard[:10000] + '... (truncated)'
-            self.session.add(Clipboard(clipboard))
+            self.session.add(models.Clipboard(clipboard))
 
     def store_click(self, button, x, y):
         """ Stores incoming mouse-clicks """
-        self.session.add(Click(button,
+        self.session.add(models.Click(button,
                                True,
                                x, y,
                                len(self.mouse_path),
@@ -289,7 +288,7 @@ class ActivityStore:
 
     def change_password(self, new_encrypter):
         self.session = self.session_maker()
-        keys = self.session.query(Keys).all()
+        keys = self.session.query(models.Keys).all()
         for k in keys:
             dtext = k.decrypt_text()
             dkeys = k.decrypt_keys()

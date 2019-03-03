@@ -29,10 +29,10 @@ from lockfile import LockFile
 import hashlib
 from Crypto.Cipher import Blowfish
 
-from activity_store import ActivityStore
-import check_password
+from selfspy.activity_store import ActivityStore
+# import check_password
 
-import config as cfg
+import selfspy.config as cfg
 
 
 def parse_config():

@@ -31,12 +31,12 @@ from collections import Counter
 from Crypto.Cipher import Blowfish
 import hashlib
 
-import config as cfg
+import selfspy.config as cfg
 
-import check_password
+# import check_password
 from period import Period
 
-import models
+import selfspy.models as models
 
 ACTIVE_SECONDS = 180
 PERIOD_LOOKUP = {'s': 'seconds', 'm': 'minutes', 'h': 'hours', 'd': 'days', 'w': 'weeks'}
@@ -561,9 +561,9 @@ if __name__ == '__main__':
 
     args['data_dir'] = os.path.expanduser(args['data_dir'])
 
-    def check_with_encrypter(password):
-        encrypter = make_encrypter(password)
-        return check_password.check(args['data_dir'], encrypter, read_only=True)
+    # def check_with_encrypter(password):
+    #     encrypter = make_encrypter(password)
+    #     return check_password.check(args['data_dir'], encrypter, read_only=True)
 
     ss = Selfstats(os.path.join(args['data_dir'], cfg.DBNAME), args)
 
@@ -574,9 +574,9 @@ if __name__ == '__main__':
         args['password'] = ''
         models.ENCRYPTER = make_encrypter(args['password'])
 
-        if not check_password.check(args['data_dir'], models.ENCRYPTER, read_only=True):
-            print('Password failed')
-            sys.exit(1)
+        # if not check_password.check(args['data_dir'], models.ENCRYPTER, read_only=True):
+        #     print('Password failed')
+        #     sys.exit(1)
 
     ss.do()
     # When trying to manually read data uncomment the previous line and run this file with
