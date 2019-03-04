@@ -1,3 +1,11 @@
+# selfspy
+
+### IMPORTANT: changes in this fork
+* works only on OSX
+* no encryption
+* tracks clipboard
+* tracks Chrome urls
+
 ### What is this?
 Selfspy is a daemon for Unix/X11, (thanks to @ljos!) Mac OS X and (thanks to @Foxboron) Windows, that continuously monitors and stores what you are doing on your computer. This way, you can get all sorts of nifty statistics and reminders on what you have been up to. It is inspired by the [Quantified Self](http://en.wikipedia.org/wiki/Quantified_Self)-movement and [Stephen Wolfram's personal key logging](http://blog.stephenwolfram.com/2012/03/the-personal-analytics-of-my-life/).
 
@@ -19,10 +27,19 @@ deactivate
 sudo python3.6 setup.py install
 ```
 
-You also need to enable access for assistive devices.
-To do that you have to add the correct applications in
-`System Preferences > Privacy > Accessibility`. What worked for me was to add iTerm `selfspy` and `/usr/bin/python`.
-Maybe use [this tool](https://github.com/jacobsalmela/tccutil) to do it from the terminal.
+#### Running on login in OS X
+If you want selfspy to start automatically on login you need to copy the `com.github.lukas1994.selfspy.plist` file to `~/Library/LaunchAgents/`.
+
+```
+launchctl load ~/Library/LaunchAgents/com.github.lukas1994.selfspy.plist
+launchctl start com.github.lukas1994.selfspy
+tail -f /var/log/system.log
+```
+
+#### grant accessibility permissions
+
+You also need to enable access for assistive devices. To do that you have to add the correct applications in
+`System Preferences > Privacy > Accessibility`. What worked for me was to add iTerm and the Python binary that is interpreting the code. To find the binary run `ps -ax | grep selfspy`.
 
 You also might have to give `osascript` permissions to access Chrome. Just run
 ```
@@ -30,11 +47,7 @@ osascript -e 'tell application "Google Chrome" to return URL of active tab of fr
 ```
 and allow the access.
 
-### IMPORTANT: changes in this fork
-* works only on OSX
-* no encryption
-* tracks clipboard
-* tracks Chrome urls
+--
 
 ### Running Selfspy
 You run selfspy with `selfspy`. You should probably start with `selfspy --help` to get to know the command line arguments. As of this writing, it should look like this:
@@ -84,14 +97,6 @@ Unless you use the --no-text flag, selfspy will store everything you type in two
 
 Normally you would like Selfspy to start automatically when you launch X. How to do this depends on your system, but it will normally mean editing *~/.xinitrc* or *~/.xsession*. If you run KDE, *~/.kde/Autostart*, is a good place to put startup scripts. When run, Selfspy will immediately spawn a daemon and exit.
 
-#### Running on login in OS X
-If you want selfspy to start automatically on login you need to copy the `com.github.lukas1994.selfspy.plist` file to `~/Library/LaunchAgents/`.
-
-```
-launchctl load ~/Library/LaunchAgents/com.github.lukas1994.selfspy.plist
-launchctl start com.github.lukas1994.selfspy
-tail -f /var/log/system.log
-```
 
 ### Example Statistics
 *"OK, so now all this data will be stored, but what can I use it for?"*
@@ -292,7 +297,7 @@ See the README file or http://gurgeh.github.com/selfspy for examples.
 ```
 
 ### Email
-To monitor that Selfspy works as it should and to continuously get feedback on yourself, it is good to  regularly mail yourself some statistics. I think the easiest way to automate this is using [sendEmail](http://www.debianadmin.com/how-to-sendemail-from-the-command-line-using-a-gmail-account-and-others.html), which can do neat stuff like send through your Gmail account.
+To monitor that Selfspy works as it should and to continuously get feedback on yourself, it is good to  regularly mail yourself some statistics. I think the easiest way to automate this is using email.
 
 Follow [this guide](https://www.developerfiles.com/how-to-send-emails-from-localhost-mac-os-x-el-capitan/) to setup `mail` on OSX.
 
